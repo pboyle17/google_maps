@@ -12,8 +12,7 @@
 
   </head>
   <body>
-    <div id=drop_down>Hello
-
+    <div id=drop_down>
         <select name="type" id="type">
         </select>
         <select name="description" id="description"></select>
@@ -27,15 +26,6 @@
     var longs=[];
     var map;
 
-    function drop() {
-  for (var i =0; i < markerArray.length; i++) {
-    setTimeout(function() {
-      addMarkerMethod();
-    }, i * 200);
-  }
-}
-
-
     $(document).ready(function(){
       var arr = [];
       var arrSec = [];
@@ -47,33 +37,54 @@
         success:function(data){
 
           console.dir(data);
-          $()
+           $(':selected').on('change',function(){
+             console.log('option has changed');
+           });
           for(var crime in data){
-            if(arr.indexOf(data[crime].primary_type)== -1){
+            if(arr.indexOf(data[crime].primary_type) == -1){
               arr.push(data[crime].primary_type);
               console.log('new type!', data[crime].primary_type);
-              $('#type').append('<option selected value="'+data[crime].primary_type+'">'+data[crime].primary_type+'</option>');
-            }
+              $('#type').append('<option id="'+data[crime].primary_type+'" value="'+data[crime].primary_type+'">'+data[crime].primary_type+'</option>');
+            }//end of if statment
 
-             if(data[crime].primary_type=='HOMICIDE'){
+             if(data[crime].primary_type==$('option:selected').val()){
+
               var marker = new google.maps.Marker({
                 position: {lat:parseFloat(data[crime].latitude),lng:parseFloat(data[crime].longitude)},
                 map: map,
                 icon:'http://megaicons.net/static/img/icons_sizes/15/534/32/map-marker-ball-left-pink-icon.png',
                 title: data[crime].primary_type+' ---- '+data[crime].description+' ---- '+data[crime].date,
                 animation:google.maps.Animation.DROP
-              });
-             }
-          }
-          console.log(arr);
+              });// end of marker constructor
+            };//end of if statment
+          }//end of for-loop
+
+          $('select').change(function(){
+            console.log($('option:selected').val());
+            console.log('yay!');
+          });//option:selected .change event listener
         },
         error:function(err){
           console.log(err);
         }
-      });
-    });
+      });//end of ajax call
+    });//end of document.ready
 
-console.log(typeof lats[0]);
+///////////function definitions//////////////////////
+
+function redrawMap(){
+  $.ajax({
+    url:'https://data.cityofchicago.org/resource/ijzp-q8t2.json',
+    type:'get',
+    success:function(data){
+      google.maps.event.trigger(map, 'resize');
+    },
+    error:function(err){
+      console.log(err);
+    }
+  });//end of $.ajax
+
+}//end of draw map function
 
 function initMap() {
   var myLatLng = {lat: 41.845652363, lng: -87.636561415};
@@ -82,19 +93,15 @@ function initMap() {
     zoom: 10,
     center: myLatLng
   });
+}//end of initMap function
 
-  // var marker = new google.maps.Marker({
-  //   animation:google.maps.Animation.DROP,
-  //   position: myLatLng,
-  //   map: map,
-  //   title: 'Hello World!'
-  // });
-}
-
-
-
-
-
+function drop() {
+  for (var i =0; i < markerArray.length; i++) {
+    setTimeout(function() {
+      addMarkerMethod();
+    }, i * 200);//end of set timeout
+  }//end of for-loop
+}//end of drop function
 
     </script>
     <script async defer
