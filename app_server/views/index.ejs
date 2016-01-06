@@ -26,11 +26,13 @@
           console.dir(data);
 
           for(var crime in data){
-            var marker = new google.maps.Marker({
-              position: {lat:parseFloat(data[crime].latitude),lng:parseFloat(data[crime].longitude)},
-              map: map,
-              title: data[crime].description
-            });
+            // if(data[crime].primary_type=='HOMICIDE'){
+              var marker = new google.maps.Marker({
+                position: {lat:parseFloat(data[crime].latitude),lng:parseFloat(data[crime].longitude)},
+                map: map,
+                title: data[crime].primary_type+' ---- '+data[crime].description+' ---- '+data[crime].date
+              });
+            // }
           }
         },
         error:function(err){
@@ -45,11 +47,12 @@ function initMap() {
   var myLatLng = {lat: 41.845652363, lng: -87.636561415};
 
    map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 4,
+    zoom: 10,
     center: myLatLng
   });
 
   var marker = new google.maps.Marker({
+    animation:google.maps.Animation.DROP,
     position: myLatLng,
     map: map,
     title: 'Hello World!'
