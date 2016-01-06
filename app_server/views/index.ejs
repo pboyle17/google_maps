@@ -4,11 +4,22 @@
     <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
       #map { height: 100%; }
+      #drop_down{
+        height:100px;
+      }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
 
   </head>
   <body>
+    <div id=drop_down>Hello
+
+        <select name="type" id="type">
+        </select>
+        <select name="description" id="description"></select>
+        <button></button>
+    </div>
+
     <div id="map"></div>
     <script type="text/javascript">
 
@@ -16,24 +27,45 @@
     var longs=[];
     var map;
 
+    function drop() {
+  for (var i =0; i < markerArray.length; i++) {
+    setTimeout(function() {
+      addMarkerMethod();
+    }, i * 200);
+  }
+}
+
 
     $(document).ready(function(){
+      var arr = [];
+      var arrSec = [];
       console.log('jquery is ready');
+
       $.ajax({
         url:'https://data.cityofchicago.org/resource/ijzp-q8t2.json',
         type:'get',
         success:function(data){
-          console.dir(data);
 
+          console.dir(data);
+          $()
           for(var crime in data){
-            // if(data[crime].primary_type=='HOMICIDE'){
+            if(arr.indexOf(data[crime].primary_type)== -1){
+              arr.push(data[crime].primary_type);
+              console.log('new type!', data[crime].primary_type);
+              $('#type').append('<option selected value="'+data[crime].primary_type+'">'+data[crime].primary_type+'</option>');
+            }
+
+             if(data[crime].primary_type=='HOMICIDE'){
               var marker = new google.maps.Marker({
                 position: {lat:parseFloat(data[crime].latitude),lng:parseFloat(data[crime].longitude)},
                 map: map,
-                title: data[crime].primary_type+' ---- '+data[crime].description+' ---- '+data[crime].date
+                icon:'http://megaicons.net/static/img/icons_sizes/15/534/32/map-marker-ball-left-pink-icon.png',
+                title: data[crime].primary_type+' ---- '+data[crime].description+' ---- '+data[crime].date,
+                animation:google.maps.Animation.DROP
               });
-            // }
+             }
           }
+          console.log(arr);
         },
         error:function(err){
           console.log(err);
@@ -51,12 +83,12 @@ function initMap() {
     center: myLatLng
   });
 
-  var marker = new google.maps.Marker({
-    animation:google.maps.Animation.DROP,
-    position: myLatLng,
-    map: map,
-    title: 'Hello World!'
-  });
+  // var marker = new google.maps.Marker({
+  //   animation:google.maps.Animation.DROP,
+  //   position: myLatLng,
+  //   map: map,
+  //   title: 'Hello World!'
+  // });
 }
 
 
@@ -66,7 +98,7 @@ function initMap() {
 
     </script>
     <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDce9h9W50bjyMQaNEkidDxicPgzweOuHY&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCg6XUTd5Bh0CNhz8vyaEjeTUSaVckCZ5A&callback=initMap">
     </script>
   </body>
 </html>
