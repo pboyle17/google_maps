@@ -54,7 +54,7 @@
           }//end of for in loop
 
 /////////////////////////change event listener
-          $('select').change(function(){
+          $('#type').change(function(){
             // console.log($('option:selected').val());
             // console.log('yay!');
             $('#description').empty();
@@ -64,6 +64,13 @@
             getIUCR($('#type').val());
           });//option:selected .change event listener
 //////////////////////////////////////////////////////
+          $('#description').change(function(){
+            removeMarkers(markers);
+            redrawMap();
+            console.log('yoyoyoyoyo');
+
+          });
+
         },
         error:function(err){
           console.log(err);
@@ -103,7 +110,7 @@ function redrawMap(){
         }//end of if statment
 
         //comparing value from first dropdown to looped
-         if(data[crime].primary_type==$('option:selected').val()){
+         if(data[crime].primary_type==$('#type option:selected').val() && $('#description option:selected').val()=='All Subtypes'){
           //  console.log(data[crime]);
            addMarker(data[crime]);
           //  console.log(markers);
@@ -163,6 +170,7 @@ function getIUCR(crime){
         }
       }
       console.log('arr: ',arr);
+      $('#description').append('<option id="All Subtypes" value="All Subtypes">ALL SUBTYPES</option>');
       for(var i in arr){
         $('#description').append('<option class="poop" id="'+arr[i]+'" value="'+arr[i]+'">'+arr[i]+'</option>');
       }
