@@ -19,6 +19,10 @@
         <select name="description" id="description">
           <option value="All Subtypes">ALL SUBTYPES</option>
         </select>
+        <label for="startDate">Start Date</label>
+        <input type="date" name='startDate' id='startDate' value='2015-10-31'></input>
+        <label for="endDate">End Date</label>
+        <input type="date" name='endDate' id='endDate'></input>
     </div>
 
     <div id="map"></div>
@@ -38,6 +42,8 @@
         url:'https://data.cityofchicago.org/resource/ijzp-q8t2.json',
         type:'get',
         success:function(data){
+          var date = new Date;
+          $('#endDate').val(parseDateString(date))
           // console.dir(data);
           // console.dir(data[0]['primary_type']);
           fillCrimeSelector('#type','primary_type',data);
@@ -69,6 +75,14 @@
             redrawMap();
             console.log('yoyoyoyoyo');
 
+          });//end of #description event listener
+
+          $('#startDate').change(function(){
+            console.log('hello world!');
+          });
+
+          $('#endDate').change(function(){
+            console.log('end world!');
           });
 
         },
@@ -186,6 +200,58 @@ function getIUCR(crime){
   });
 }//end getIUCR function
 
+var day = new Date
+
+var day = day.toString();
+
+parseDateString(day);
+
+
+function parseDateString(date){
+  date=date.toString();
+  var arr=date.split(' ');
+  return arr[3]+'-'+getNumberMonthFromName(arr[1])+'-'+arr[2];
+
+}
+
+function getNumberMonthFromName(str){
+  if(str=='Jan'){
+    return '01'
+  }
+  if(str == 'Feb'){
+    return '02'
+  }
+  if(str == 'Mar'){
+    return '03'
+  }
+  if(str == 'Apr'){
+    return '04'
+  }
+  if(str == 'May'){
+    return '05'
+  }
+  if(str == 'Jun'){
+    return '06'
+  }
+  if(str == 'Jul'){
+    return '07'
+  }
+  if(str == 'Aug'){
+    return '08'
+  }
+  if(str == 'Sep'){
+    return '09'
+  }
+  if(str == 'Oct'){
+    return '10'
+  }
+  if(str == 'Nov'){
+    return '11'
+  }
+  if(str == 'Dec'){
+    return '12'
+  }
+}
 
 
     </script>
