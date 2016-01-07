@@ -44,8 +44,12 @@
         success:function(data){
           var date = new Date;
           $('#endDate').val(parseDateString(date))
-          // console.dir(data);
+
+          console.dir(data);
+          var thing = data[0].date
+          console.log(thing);
           // console.dir(data[0]['primary_type']);
+
           fillCrimeSelector('#type','primary_type',data);
           console.log($('option:selected').val());
           for(var crime in data){
@@ -250,6 +254,15 @@ function getNumberMonthFromName(str){
   }
   if(str == 'Dec'){
     return '12'
+  }
+}
+
+//takes in a UTC dates in miliseconds and returns true/false if is within those ranges
+function isDateInRange(testDate,startDate,endDate){
+    if ( startDate <= testDate && testDate <= endDate ) {
+      return true;
+  } else {
+      return false;
   }
 }
 
