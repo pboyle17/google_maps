@@ -114,8 +114,12 @@ function redrawMap(){
           //  console.log(data[crime]);
            addMarker(data[crime]);
           //  console.log(markers);
+        }//end of if statment
 
-        };//end of if statment
+        if(data[crime].primary_type==$('#type option:selected').val() && $('#description option:selected').val()==data[crime].description){
+          addMarker(data[crime]);
+        }//end of if statment
+
       }//end of for-loop
     },
     error:function(err){
