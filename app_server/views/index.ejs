@@ -37,21 +37,21 @@
         type:'get',
         success:function(data){
           console.dir(data);
+          console.dir(data[0]['primary_type']);
+          // for(var crime in data){
+          //   if(arr.indexOf(data[crime].primary_type) == -1){
+          //     arr.push(data[crime].primary_type);
+          //     console.log('new type!', data[crime].primary_type);
+          //     $('#type').append('<option id="'+data[crime].primary_type+'" value="'+data[crime].primary_type+'">'+data[crime].primary_type+'</option>');
+          //   }//end of if statment
+          fillSelector('#type','primary_type',data);
           for(var crime in data){
-            if(arr.indexOf(data[crime].primary_type) == -1){
-              arr.push(data[crime].primary_type);
-              console.log('new type!', data[crime].primary_type);
-              $('#type').append('<option id="'+data[crime].primary_type+'" value="'+data[crime].primary_type+'">'+data[crime].primary_type+'</option>');
-            }//end of if statment
-
              if(data[crime].primary_type==$('option:selected').val()){
                console.log(data[crime]);
                addMarker(data[crime]);
                console.log(markers);
-
             };//end of if statment
-          }//end of for-loop
-
+          }//end of for in loop
 
 /////////////////////////change event listener
           $('select').change(function(){
@@ -88,6 +88,7 @@ function removeMarkers(arr){
 }
 function redrawMap(){
   var arr=[];
+  var arrDes=[];
   $.ajax({
     url:'https://data.cityofchicago.org/resource/ijzp-q8t2.json',
     type:'get',
@@ -123,6 +124,18 @@ function initMap() {
     center: myLatLng
   });
 }//end of initMap function
+
+function fillSelector(id,field,data){
+  arr=[];
+  for(var crime in data){
+    console.dir(data[crime][field]);
+    if(arr.indexOf(data[crime][field]) == -1){
+      arr.push(data[crime][field]);
+      console.log('new type!', data[crime][field]);
+      $(id).append('<option id="'+data[crime][field]+'" value="'+data[crime][field]+'">'+data[crime][field]+'</option>');
+    }//end of if statment
+  }//end of for-in loop
+}//end of fillSelector function
 
 // function drop(data)) {
 //   for (var i =0; i < markerArray.length; i++) {
