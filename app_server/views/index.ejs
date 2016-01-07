@@ -57,8 +57,11 @@
           $('select').change(function(){
             // console.log($('option:selected').val());
             // console.log('yay!');
+            $('#description').empty();
             removeMarkers(markers);
             redrawMap();
+            console.log($('#type'));
+            getIUCR($('#type').val());
           });//option:selected .change event listener
 //////////////////////////////////////////////////////
         },
@@ -97,10 +100,9 @@ function redrawMap(){
       for(var crime in data){
         if(arr.indexOf(data[crime].primary_type) == -1){
           arr.push(data[crime].primary_type);
-          // console.log('new type!', data[crime].primary_type);
-          // $('#type').append('<option id="'+data[crime].primary_type+'" value="'+data[crime].primary_type+'">'+data[crime].primary_type+'</option>');
         }//end of if statment
 
+        //comparing value from first dropdown to looped
          if(data[crime].primary_type==$('option:selected').val()){
           //  console.log(data[crime]);
            addMarker(data[crime]);
@@ -133,7 +135,7 @@ function fillCrimeSelector(id,field,data){
     if(arr.indexOf(data[crime][field]) == -1){
       arr.push(data[crime][field]);
       // console.log('new type!', data[crime][field]);
-        $(id).append('<option id="'+data[crime][field]+'" value="'+data[crime][field]+'">'+data[crime][field]+'</option>');
+        $(id).append('<option id="'+data[crime][field]+'"  value="'+data[crime][field]+'">'+data[crime][field]+'</option>');
 
     }//end of if statment
 
@@ -141,9 +143,38 @@ function fillCrimeSelector(id,field,data){
 
 }//end of fillSelector function
 
-$.post('/api',{name:'Terry'}, function(data){
-  console.log(data);
-});
+// $.post('/api',{name:'Terry'}, function(data){
+//   console.log(data);
+// });
+
+getIUCR('ROBBERY');
+
+function getIUCR(crime){
+  $.ajax({
+    url:'https://data.cityofchicago.org/resource/c7ck-438e.json',
+    type:'get',
+    success:function(data){
+      var arr=[];
+      console.log(data);
+      for(var x in data){
+        if(data[x].primary_description==crime){
+          console.log(data[x]);
+          arr.push(data[x].secondary_description);
+        }
+      }
+      console.log('arr: ',arr);
+      for(var i in arr){
+        $('#description').append('<option class="poop" id="'+arr[i]+'" value="'+arr[i]+'">'+arr[i]+'</option>');
+      }
+
+    },
+    error:function(err){
+      console.log(err);
+    }
+  });
+}//end getIUCR function
+
+
 
     </script>
     <script async defer
