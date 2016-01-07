@@ -83,6 +83,8 @@
 
           $('#startDate').change(function(){
             console.log('hello world!');
+            removeMarkers(markers);
+            redrawMap();
           });
 
           $('#endDate').change(function(){
@@ -128,7 +130,7 @@ function redrawMap(){
         }//end of if statment
 
         //comparing value from first dropdown to looped
-         if(data[crime].primary_type==$('#type option:selected').val() && $('#description option:selected').val()=='All Subtypes'){
+         if(data[crime].primary_type==$('#type option:selected').val() && $('#description option:selected').val()=='All Subtypes' && isDateInRange(Date.parse(data[crime].date),Date.parse($('#startDate').val()),Date.parse($('#endDate').val()))) {
           //  console.log(data[crime]);
            addMarker(data[crime]);
           //  console.log(markers);
@@ -148,6 +150,7 @@ function redrawMap(){
 }//end of draw map function
 
 function initMap() {
+  //chicago coordinates to center the map
   var myLatLng = {lat: 41.845652363, lng: -87.636561415};
 
    map = new google.maps.Map(document.getElementById('map'), {
@@ -176,8 +179,6 @@ function fillCrimeSelector(id,field,data){
 //   console.log(data);
 // });
 
-getIUCR('ROBBERY');
-
 function getIUCR(crime){
   $.ajax({
     url:'https://data.cityofchicago.org/resource/c7ck-438e.json',
@@ -204,18 +205,10 @@ function getIUCR(crime){
   });
 }//end getIUCR function
 
-var day = new Date
-
-var day = day.toString();
-
-parseDateString(day);
-
-
 function parseDateString(date){
   date=date.toString();
   var arr=date.split(' ');
   return arr[3]+'-'+getNumberMonthFromName(arr[1])+'-'+arr[2];
-
 }
 
 function getNumberMonthFromName(str){
